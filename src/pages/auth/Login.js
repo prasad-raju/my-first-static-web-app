@@ -58,10 +58,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   minHeight: '85vh',
   flexDirection: 'column',
-  justifyContent: 'center',
-  [theme.breakpoints.down("sm")]: {
-    minHeight: '65vh',
-  },
+  justifyContent: 'center'
 }));
 
 const useStyles = makeStyles((theme) => ({
@@ -77,10 +74,7 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     width: '15%',
     height: '50%',
-    margin: '16px',
-    [theme.breakpoints.down('md')]: {
-      width: '35%',
-    }
+    margin: '16px'
   },
 
   loginForm: {
