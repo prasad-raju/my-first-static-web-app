@@ -2,7 +2,7 @@ import { LogLevel } from "@azure/msal-browser";
 
 export const msalConfig = {
     auth: {
-        clientId: "52d713be-d080-4419-9c58-0337ceb65d44",
+        clientId: "b19cd71e-bfd3-47ec-bfc8-31414778f061",
         authority: "https://testmyad1982.b2clogin.com/testmyad1982.onmicrosoft.com/B2C_1_signupsigninTest1",
         knownAuthorities: ['testmyad1982.b2clogin.com'],
         redirectUri: "https://ashy-mud-07dc67310.1.azurestaticapps.net"
