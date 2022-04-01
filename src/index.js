@@ -30,9 +30,16 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
+
 // @mui
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+// Azure AD Authentication
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "./authConfig";
+
 // redux
 import { store, persistor } from './redux/store';
 // contexts
@@ -52,7 +59,10 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+
 // ----------------------------------------------------------------------
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 ReactDOM.render(
   <AuthProvider>
@@ -63,7 +73,9 @@ ReactDOM.render(
             <SettingsProvider>
               <CollapseDrawerProvider>
                 <BrowserRouter>
-                  <App />
+                  <MsalProvider instance={msalInstance}>
+                    <App />
+                  </MsalProvider>
                 </BrowserRouter>
               </CollapseDrawerProvider>
             </SettingsProvider>

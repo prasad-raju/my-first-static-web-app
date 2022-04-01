@@ -1,9 +1,14 @@
+import {useEffect} from 'react';
 import { capitalCase } from 'change-case';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Card, Stack, Link, Alert, Tooltip, Container, Typography, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { LoadingButton } from '@mui/lab';
+// Azure Ad
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal, useIsAuthenticated } from "@azure/msal-react";
+import { loginRequest } from "../../authConfig";
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // hooks
@@ -15,6 +20,8 @@ import Logo from '../../components/Logo';
 import Image from '../../components/Image';
 // sections
 import { LoginForm } from '../../sections/auth/login';
+
+
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -93,6 +100,28 @@ export default function Login() {
 
   const mdUp = useResponsive('up', 'md');
 
+  const navigate = useNavigate();
+
+  const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+
+  const handleLogin = () => {
+    instance.loginPopup(loginRequest).then((response) => {if(response){navigate('dashboard/app')}}).catch(e => {
+        console.log(e);
+    });
+    console.log(accounts);
+    // if(accounts){
+    //   navigate('dashboard/app');
+    // }
+  }
+
+  const handleLogout = (logoutType) => {
+        instance.logoutPopup({
+            postLogoutRedirectUri: "/",
+            mainWindowRedirectUri: "/"
+        });
+  }
+
   return (
     <Page title="Login">
       <img src="/logo/splash_Logo.png" className={classes.logo} alt="" />
@@ -109,11 +138,22 @@ export default function Login() {
                     <Typography variant="h4" gutterBottom className={classes.textCenter}>
                       Welcome to ECO Control App
                     </Typography>
-                    <Typography sx={{ color: 'text.secondary' }} className={classes.textCenter}>Use your Windows Credentials to Login</Typography>
+                    <Typography sx={{ color: 'text.secondary' }} className={classes.textCenter}>
+                      <UnauthenticatedTemplate>
+                        <LoadingButton onClick={() => handleLogin()} style={{ marginTop: '16px', backgroundColor: '#78be20', color: '#ffffff' }}>
+                          Sign-In with your credentials
+                        </LoadingButton>
+                      </UnauthenticatedTemplate>
+                      <AuthenticatedTemplate>
+                        <LoadingButton onClick={() => handleLogout()} style={{ marginTop: '16px', backgroundColor: '#78beaa', color: '#ffffff' }}>
+                          Sign-Out
+                        </LoadingButton>
+                      </AuthenticatedTemplate>
+                    </Typography>
                   </Box>
                 </Stack>
                 <div className={classes.loginForm}>
-                  <LoginForm />
+                  {/* <LoginForm /> */}
                   <Typography className={classes.versionText}>Version No. 1.2.3 </Typography>
                 </div>
               </ContentStyle>
