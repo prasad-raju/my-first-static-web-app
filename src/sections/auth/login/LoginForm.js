@@ -55,11 +55,11 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = methods;
 
-  // useEffect(() => {
-  //   if(isAuthenticated){
-  //    const timer = setTimeout(() => navigate('dashboard/app'), 500);
-  //   }
-  // },[isAuthenticated]);
+  useEffect(() => {
+    if(isAuthenticated){
+     const timer = setTimeout(() => navigate('dashboard/app'), 500);
+    }
+  },[isAuthenticated]);
 
   // useFocusEffect(() => {
   //   if(isAuthenticated){
@@ -67,29 +67,16 @@ export default function LoginForm() {
   //   }
   // },[isAuthenticated])
 
-  // const onSubmit = async (data) => {
-  //   try {
-
-  //     const response = await instance.loginPopup(loginRequest);
-  //     console.log(response.accessToken);
-  //     // if(response){
-  //     //   navigate('dashboard/app')
-  //     // }
-      
-      
-  //   } catch (error) {
-  //     console.error(error);
-  //     reset();
-  //     if (isMountedRef.current) {
-  //       setError('afterSubmit', { ...error, message: error.message });
-  //     }
-  //   }
-  // };
-
   const onSubmit = async (data) => {
     try {
       await login(data.email, data.password);
-      navigate('dashboard/app')
+      const response = await instance.loginPopup(loginRequest);
+      console.log(response.accessToken);
+      if(response){
+        navigate('dashboard/app')
+      }
+      
+      
     } catch (error) {
       console.error(error);
       reset();
@@ -98,6 +85,19 @@ export default function LoginForm() {
       }
     }
   };
+
+  // const onSubmit = async (data) => {
+  //   try {
+  //     await login(data.email, data.password);
+  //     navigate('dashboard/app')
+  //   } catch (error) {
+  //     console.error(error);
+  //     reset();
+  //     if (isMountedRef.current) {
+  //       setError('afterSubmit', { ...error, message: error.message });
+  //     }
+  //   }
+  // };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
