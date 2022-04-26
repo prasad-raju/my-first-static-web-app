@@ -4,6 +4,10 @@ import { useTheme } from '@mui/material/styles';
 import { Container, Grid, Stack, Box } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 import merge from 'lodash/merge';
+import { LoadingButton } from '@mui/lab';
+// Azure Ad
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal, useIsAuthenticated } from "@azure/msal-react";
+import { loginRequest } from "../../authConfig";
 // hooks
 import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
@@ -67,9 +71,22 @@ function ColumnChart() {
     },
   });
   const [seriesData, setSeriesData] = useState('Year');
+  const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
 
+  const handleLogout = (logoutType) => {
+      instance.logoutPopup({
+          postLogoutRedirectUri: "/",
+          mainWindowRedirectUri: "/"
+      });
+  }
   return (
     <>
+      <div>
+      <LoadingButton onClick={() => handleLogout()} style={{ marginTop: '16px', backgroundColor: '#78beaa', color: '#ffffff' }}>
+        Sign-Out
+      </LoadingButton>
+      </div>
       {CHART_DATA.map((item: any) => (
         <Box key={item.year} dir="ltr" style={{ boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' }}>
           {item.year === seriesData && (

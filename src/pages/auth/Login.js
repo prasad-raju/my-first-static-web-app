@@ -140,9 +140,9 @@ export default function Login() {
                     </Typography>
                     <Typography sx={{ color: 'text.secondary' }} className={classes.textCenter}>
                       <UnauthenticatedTemplate>
-                        <LoadingButton onClick={() => handleLogin()} style={{ marginTop: '16px', backgroundColor: '#78be20', color: '#ffffff' }}>
+                        {/* <LoadingButton onClick={() => handleLogin()} style={{ marginTop: '16px', backgroundColor: '#78be20', color: '#ffffff' }}>
                           Sign-In with your credentials
-                        </LoadingButton>
+                        </LoadingButton> */}
                       </UnauthenticatedTemplate>
                       <AuthenticatedTemplate>
                         <LoadingButton onClick={() => handleLogout()} style={{ marginTop: '16px', backgroundColor: '#78beaa', color: '#ffffff' }}>
@@ -153,7 +153,7 @@ export default function Login() {
                   </Box>
                 </Stack>
                 <div className={classes.loginForm}>
-                  {/* <LoginForm /> */}
+                  <LoginForm />
                   <Typography className={classes.versionText}>Version No. 1.2.3 </Typography>
                 </div>
               </ContentStyle>

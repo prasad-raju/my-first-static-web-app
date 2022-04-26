@@ -1,12 +1,16 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useFocusEffect } from "@react-navigation/core";
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Link, Stack, Alert, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// Azure Ad
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal, useIsAuthenticated } from "@azure/msal-react";
+import { loginRequest } from "../../../authConfig";
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
 // hooks
@@ -24,6 +28,9 @@ export default function LoginForm() {
   const isMountedRef = useIsMountedRef();
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -47,6 +54,37 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
+
+  // useEffect(() => {
+  //   if(isAuthenticated){
+  //    const timer = setTimeout(() => navigate('dashboard/app'), 500);
+  //   }
+  // },[isAuthenticated]);
+
+  // useFocusEffect(() => {
+  //   if(isAuthenticated){
+  //     navigate('dashboard/app')
+  //   }
+  // },[isAuthenticated])
+
+  // const onSubmit = async (data) => {
+  //   try {
+
+  //     const response = await instance.loginPopup(loginRequest);
+  //     console.log(response.accessToken);
+  //     // if(response){
+  //     //   navigate('dashboard/app')
+  //     // }
+      
+      
+  //   } catch (error) {
+  //     console.error(error);
+  //     reset();
+  //     if (isMountedRef.current) {
+  //       setError('afterSubmit', { ...error, message: error.message });
+  //     }
+  //   }
+  // };
 
   const onSubmit = async (data) => {
     try {
